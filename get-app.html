@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>NS Kapra — Shop Management App</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Nastaliq+Urdu:wght@500;700&display=swap');
+
+  :root{
+    --green-dark:#0B2E23;
+    --green-mid:#12503C;
+    --green-line:#1F6E52;
+    --gold:#D4A548;
+    --gold-light:#E8C378;
+    --ivory:#F6F1E4;
+    --ivory-line:#E4D9BE;
+    --charcoal:#2A2823;
+    --muted:#7A8A82;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background:var(--ivory);
+    color:var(--charcoal);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  .urdu{ font-family:'Noto Nastaliq Urdu', serif; direction:rtl; }
+
+  /* ===== Stitched seam divider — signature element ===== */
+  .seam{
+    position:relative;
+    height:2px;
+    margin:0 auto;
+    width:88%;
+    max-width:640px;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--gold) 0px, var(--gold) 10px,
+      transparent 10px, transparent 20px
+    );
+    opacity:0.7;
+  }
+  .seam::before, .seam::after{
+    content:'';
+    position:absolute;
+    top:50%; transform:translateY(-50%);
+    width:7px; height:7px;
+    border-radius:50%;
+    background:var(--gold);
+  }
+  .seam::before{ left:-4px; }
+  .seam::after{ right:-4px; }
+
+  /* ===== HERO ===== */
+  .hero{
+    background:
+      radial-gradient(ellipse 120% 80% at 50% -10%, var(--green-line) 0%, transparent 55%),
+      linear-gradient(180deg, var(--green-dark) 0%, #0A2A20 100%);
+    color:var(--ivory);
+    padding: 56px 24px 48px;
+    text-align:center;
+    position:relative;
+  }
+
+  .hero::after{
+    content:'';
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:40px;
+    background: linear-gradient(180deg, transparent, var(--ivory));
+    pointer-events:none;
+  }
+
+  .crest{
+    width:112px; height:112px;
+    margin:0 auto 22px;
+    border-radius:28px;
+    background: linear-gradient(155deg, var(--gold-light), var(--gold) 60%, #A87E2F);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.4);
+  }
+  .crest svg{ width:62px; height:62px; }
+
+  .eyebrow{
+    font-size:12.5px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--gold-light);
+    font-weight:600;
+    margin-bottom:14px;
+  }
+
+  h1{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:clamp(34px, 9vw, 50px);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+  }
+  h1 span{ color:var(--gold); font-style:italic; }
+
+  .hero-sub{
+    margin-top:16px;
+    font-size:16px;
+    line-height:1.7;
+    color:#D9E4DD;
+    max-width:440px;
+    margin-left:auto; margin-right:auto;
+  }
+
+  .hero-tags{
+    margin-top:22px;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .tag{
+    font-size:12px;
+    padding:6px 13px;
+    border-radius:100px;
+    border:1px solid rgba(212,165,72,0.45);
+    color:var(--gold-light);
+    letter-spacing:0.02em;
+  }
+
+  /* ===== CTA BUTTON ===== */
+  .cta-wrap{ padding: 34px 24px 8px; text-align:center; }
+
+  .cta{
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    background: linear-gradient(180deg, var(--gold-light), var(--gold));
+    color:var(--green-dark);
+    font-weight:700;
+    font-size:17px;
+    padding:18px 34px;
+    border-radius:100px;
+    text-decoration:none;
+    box-shadow: 0 14px 28px rgba(212,165,72,0.35), 0 4px 8px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.5);
+    transition: transform 0.15s ease;
+  }
+  .cta:active{ transform: scale(0.97); }
+  .cta svg{ width:20px; height:20px; }
+
+  .cta-note{
+    margin-top:14px;
+    font-size:12.5px;
+    color:var(--muted);
+  }
+  .cta-note b{ color:var(--charcoal); }
+
+  /* ===== FEATURES ===== */
+  .features{
+    padding: 44px 22px 20px;
+    max-width:520px;
+    margin:0 auto;
+  }
+
+  .section-title{
+    text-align:center;
+    font-family:'Playfair Display', serif;
+    font-size:26px;
+    font-weight:600;
+    color:var(--green-dark);
+    margin-bottom:6px;
+  }
+  .section-sub{
+    text-align:center;
+    font-size:13.5px;
+    color:var(--muted);
+    margin-bottom:30px;
+  }
+
+  .swatches{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .swatch{
+    display:flex;
+    align-items:flex-start;
+    gap:16px;
+    background:#FFFFFF;
+    border:1px solid var(--ivory-line);
+    border-radius:16px;
+    padding:16px 18px;
+    position:relative;
+    overflow:hidden;
+  }
+  .swatch::before{
+    content:'';
+    position:absolute;
+    left:0; top:0; bottom:0;
+    width:4px;
+    background:var(--gold);
+  }
+  .swatch-icon{
+    flex-shrink:0;
+    width:42px; height:42px;
+    border-radius:11px;
+    background: linear-gradient(155deg, var(--green-mid), var(--green-dark));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .swatch-icon svg{ width:21px; height:21px; stroke:var(--gold-light); }
+  .swatch-title{
+    font-weight:700;
+    font-size:15px;
+    color:var(--charcoal);
+    margin-bottom:3px;
+  }
+  .swatch-desc{
+    font-size:13px;
+    color:var(--muted);
+    line-height:1.5;
+  }
+
+  /* ===== HOW TO INSTALL ===== */
+  .install{
+    background: var(--green-dark);
+    color:var(--ivory);
+    padding:44px 24px 50px;
+    margin-top:46px;
+  }
+  .install .section-title{ color:var(--ivory); }
+  .install .section-sub{ color:#9FB3A9; margin-bottom:28px; }
+
+  .steps{
+    max-width:440px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+  .step{
+    display:flex;
+    gap:16px;
+    padding-bottom:26px;
+    position:relative;
+  }
+  .step:not(:last-child)::before{
+    content:'';
+    position:absolute;
+    left:15px; top:34px; bottom:0;
+    width:1px;
+    background: repeating-linear-gradient(to bottom, var(--gold) 0, var(--gold) 4px, transparent 4px, transparent 9px);
+  }
+  .step-num{
+    flex-shrink:0;
+    width:32px; height:32px;
+    border-radius:50%;
+    background:var(--gold);
+    color:var(--green-dark);
+    font-weight:700;
+    font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+    z-index:1;
+  }
+  .step-text{ padding-top:4px; }
+  .step-title{ font-weight:600; font-size:14.5px; margin-bottom:3px; }
+  .step-desc{ font-size:13px; color:#AEC0B7; line-height:1.6; }
+
+  /* ===== FOOTER ===== */
+  footer{
+    text-align:center;
+    padding:30px 24px 40px;
+    background:var(--ivory);
+  }
+  footer .brand{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:16px;
+    color:var(--green-dark);
+    margin-bottom:6px;
+  }
+  footer .tagline{
+    font-size:12px;
+    color:var(--muted);
+    letter-spacing:0.03em;
+  }
+
+  @media (min-width:600px){
+    .hero{ padding:72px 24px 60px; }
+    .swatches{ gap:16px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="crest">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0B2E23" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 3 C9 5 7 6 5 7 L12 12 L19 7 C17 6 15 5 15 3 Z"/>
+        <path d="M8 10 L8 21 L16 21 L16 10"/>
+      </svg>
+    </div>
+    <div class="eyebrow">NS Collection Presents</div>
+    <h1>NS <span>Kapra</span></h1>
+    <p class="hero-sub urdu">آپ کی دکان کا مکمل حساب کتاب، اب ایک ہی ایپ میں — اسٹاک، سیل، اور کھاتہ سب ایک جگہ۔</p>
+    <div class="hero-tags">
+      <span class="tag">Stock</span>
+      <span class="tag">Sales</span>
+      <span class="tag">Khata / Ledger</span>
+      <span class="tag">WhatsApp Billing</span>
+    </div>
+  </section>
+
+  <div class="cta-wrap">
+    <a class="cta" href="https://github.com/nskapraofficial/ns-kapra/raw/main/app-release.apk" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v13"/>
+        <path d="M6 11l6 6 6-6"/>
+        <path d="M5 21h14"/>
+      </svg>
+      App Download Karein
+    </a>
+    <p class="cta-note">Free &nbsp;•&nbsp; <b>939 KB</b> &nbsp;•&nbsp; Android</p>
+  </div>
+
+  <div class="seam" style="margin-top:38px;"></div>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <h2 class="section-title">App Mein Kya Hai</h2>
+    <p class="section-sub urdu">دکان چلانے کے لیے جو بھی چاہیے، سب موجود ہے</p>
+
+    <div class="swatches">
+      <div class="swatch">
+        <div class="swatch-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4"/><path d="M3 17l9 4 9-4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="swatch-title">Stock Management</div>
+          <div class="swatch-desc">Kapre ka poora record — kitna maal aaya, kitna bika, kitna baqi hai.</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+          </svg>
+        </div>
+        <div>
+          <div class="swatch-title">Sales &amp; Billing</div>
+          <div class="swatch-desc">Har sale ka bill turant banayein aur customer ko WhatsApp par bhejein.</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16v16H4z"/><path d="M9 9h6M9 13h6M9 17h3"/>
+          </svg>
+        </div>
+        <div>
+          <div class="swatch-title">Khata / Ledger</div>
+          <div class="swatch-desc">Har customer ka udhaar-hisaab alag, WhatsApp reminder ke saath.</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+          </svg>
+        </div>
+        <div>
+          <div class="swatch-title">Expenses &amp; Profit/Loss</div>
+          <div class="swatch-desc">Rozana kharcha darj karein, munafa-nuqsan ek nazar mein dekhein.</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            <path d="M12 9v4M12 17h.01"/>
+          </svg>
+        </div>
+        <div>
+          <div class="swatch-title">Damage Tracker</div>
+          <div class="swatch-desc">Khraab ya zaya maal ka record, taake nuqsan ka pata hamesha rahe.</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 18h6"/>
+          </svg>
+        </div>
+        <div>
+          <div class="swatch-title">Internet Ki Zaroorat Nahi</div>
+          <div class="swatch-desc">Poora app offline chalta hai — data hamesha aapke phone mein mehfooz.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALL STEPS -->
+  <section class="install">
+    <h2 class="section-title">Install Kaise Karein</h2>
+    <p class="section-sub">Sirf 3 asaan steps</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <div class="step-title">Download Karein</div>
+          <div class="step-desc">Upar diye button se APK file apne phone mein download karein.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <div class="step-title">Unknown Source Allow Karein</div>
+          <div class="step-desc">Phone ek permission maangega — "Allow" ya "Install anyway" dabayein.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <div class="step-title">Install &amp; Kholein</div>
+          <div class="step-desc">Install hone ke baad app kholein — bas, ab dukan ka hisaab tayyar hai.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="brand">NS Kapra</div>
+    <div class="tagline">NS Collection · Tando Adam, Sindh</div>
+  </footer>
+
+</body>
+</html>
